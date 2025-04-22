@@ -2,7 +2,7 @@ import express from 'express';
 import cors from 'cors';
 import usuariosRoutes from './routes/usuarios.js';
 import documentosRoutes from './routes/documentos.js';
-import { swaggerSpec } from './swagger.js';
+import swaggerSpec from './swagger.js';
 import swaggerUi from 'swagger-ui-express';
 
 import documentosBuscarRoutes from './routes/documentosBuscar.js';
