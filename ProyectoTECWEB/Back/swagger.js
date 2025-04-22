@@ -1,4 +1,8 @@
 import swaggerJSDoc from 'swagger-jsdoc';
+import swaggerUi from 'swagger-ui-express';
+import express from 'express';
+
+const app = express();
 
 const swaggerOptions = {
   definition: {
@@ -24,7 +28,6 @@ const swaggerOptions = {
   apis: ['./routes/*.js'], // Ruta donde se encuentran los archivos con los comentarios de JSDoc para Swagger
 };
 
-// Generación de documentación con Swagger
 const swaggerSpec = swaggerJSDoc(swaggerOptions);
-
-export default swaggerSpec;  // Exportando la configuración correctamente
+export default swaggerSpec;
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
