@@ -10,9 +10,62 @@ const tiposValidos = [
   'ley', 'decreto', 'resolucion', 'plan', 'norma',
   'resolucion_municipal', 'programa', 'otro'
 ];
+
+/**
+ * @swagger
+ * /reportes-pdf/documentos:
+ *   get:
+ *     summary: Generar PDF con resumen de documentos
+ *     tags: [Reportes PDF]
+ *     security:
+ *       - bearerAuth: []
+ *     responses:
+ *       200:
+ *         description: PDF generado con éxito
+ *         content:
+ *           application/pdf:
+ *             schema:
+ *               type: string
+ *               format: binary
+ *       401:
+ *         description: No autorizado
+ *       403:
+ *         description: Acceso denegado
+ */
 // routes/reportesPDF.js
 router.get('/documentos', verificarToken, validarRol('MIGA'), reportesPDFController.getPDFDocumentos);
 
+/**
+ * @swagger
+ * /reportes-pdf/documentos/tipo/{tipo}:
+ *   get:
+ *     summary: Generar PDF de documentos filtrados por tipo
+ *     tags: [Reportes PDF]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: tipo
+ *         required: true
+ *         schema:
+ *           type: string
+ *           enum: [ley, decreto, resolucion, plan, norma, resolucion_municipal, programa, otro]
+ *         description: Tipo de documento
+ *     responses:
+ *       200:
+ *         description: PDF generado correctamente
+ *         content:
+ *           application/pdf:
+ *             schema:
+ *               type: string
+ *               format: binary
+ *       400:
+ *         description: Tipo no válido
+ *       401:
+ *         description: No autorizado
+ *       403:
+ *         description: Acceso denegado
+ */
 router.get('/documentos/tipo/:tipo',
   verificarToken,
   validarRol('MIGA'),
@@ -20,6 +73,38 @@ router.get('/documentos/tipo/:tipo',
   reportesPDFController.getPDFDocumentosPorTipo
 );
 
+/**
+ * @swagger
+ * /reportes-pdf/documentos/anio/{anio}:
+ *   get:
+ *     summary: Generar PDF de documentos filtrados por año
+ *     tags: [Reportes PDF]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: anio
+ *         required: true
+ *         schema:
+ *           type: integer
+ *           minimum: 1900
+ *           maximum: 2100
+ *         description: Año del documento
+ *     responses:
+ *       200:
+ *         description: PDF generado correctamente
+ *         content:
+ *           application/pdf:
+ *             schema:
+ *               type: string
+ *               format: binary
+ *       400:
+ *         description: Año no válido
+ *       401:
+ *         description: No autorizado
+ *       403:
+ *         description: Acceso denegado
+ */
 router.get('/documentos/anio/:anio',
   verificarToken,
   validarRol('MIGA'),
@@ -27,5 +112,26 @@ router.get('/documentos/anio/:anio',
   reportesPDFController.getPDFDocumentosPorAnio
 );
 
+/**
+ * @swagger
+ * /reportes-pdf/consultas:
+ *   get:
+ *     summary: Generar PDF con resumen de consultas realizadas
+ *     tags: [Reportes PDF]
+ *     security:
+ *       - bearerAuth: []
+ *     responses:
+ *       200:
+ *         description: PDF generado correctamente
+ *         content:
+ *           application/pdf:
+ *             schema:
+ *               type: string
+ *               format: binary
+ *       401:
+ *         description: No autorizado
+ *       403:
+ *         description: Acceso denegado
+ */
 router.get('/consultas', verificarToken, validarRol('MIGA'), reportesPDFController.getPDFConsultas);
 export default router;
