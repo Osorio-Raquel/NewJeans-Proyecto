@@ -13,7 +13,7 @@ const tiposValidos = [
 
 /**
  * @swagger
- * /reportes-pdf/documentos:
+ * /api/reportes/pdf/documentos:
  *   get:
  *     summary: Generar PDF con resumen de documentos
  *     tags: [Reportes PDF]
@@ -22,6 +22,11 @@ const tiposValidos = [
  *     responses:
  *       200:
  *         description: PDF generado con éxito
+ *         headers:
+ *           Content-Disposition:
+ *             schema:
+ *               type: string
+ *             description: Nombre del archivo sugerido para descarga
  *         content:
  *           application/pdf:
  *             schema:
@@ -32,12 +37,11 @@ const tiposValidos = [
  *       403:
  *         description: Acceso denegado
  */
-// routes/reportesPDF.js
 router.get('/documentos', verificarToken, validarRol('MIGA'), reportesPDFController.getPDFDocumentos);
 
 /**
  * @swagger
- * /reportes-pdf/documentos/tipo/{tipo}:
+ * /api/reportes/pdf/documentos/tipo/{tipo}:
  *   get:
  *     summary: Generar PDF de documentos filtrados por tipo
  *     tags: [Reportes PDF]
@@ -54,6 +58,11 @@ router.get('/documentos', verificarToken, validarRol('MIGA'), reportesPDFControl
  *     responses:
  *       200:
  *         description: PDF generado correctamente
+ *         headers:
+ *           Content-Disposition:
+ *             schema:
+ *               type: string
+ *             description: Nombre del archivo sugerido para descarga
  *         content:
  *           application/pdf:
  *             schema:
@@ -75,7 +84,7 @@ router.get('/documentos/tipo/:tipo',
 
 /**
  * @swagger
- * /reportes-pdf/documentos/anio/{anio}:
+ * /api/reportes/pdf/documentos/anio/{anio}:
  *   get:
  *     summary: Generar PDF de documentos filtrados por año
  *     tags: [Reportes PDF]
@@ -93,6 +102,11 @@ router.get('/documentos/tipo/:tipo',
  *     responses:
  *       200:
  *         description: PDF generado correctamente
+ *         headers:
+ *           Content-Disposition:
+ *             schema:
+ *               type: string
+ *             description: Nombre del archivo sugerido para descarga
  *         content:
  *           application/pdf:
  *             schema:
@@ -114,7 +128,7 @@ router.get('/documentos/anio/:anio',
 
 /**
  * @swagger
- * /reportes-pdf/consultas:
+ * /api/reportes/pdf/consultas:
  *   get:
  *     summary: Generar PDF con resumen de consultas realizadas
  *     tags: [Reportes PDF]
@@ -123,6 +137,11 @@ router.get('/documentos/anio/:anio',
  *     responses:
  *       200:
  *         description: PDF generado correctamente
+ *         headers:
+ *           Content-Disposition:
+ *             schema:
+ *               type: string
+ *             description: Nombre del archivo sugerido para descarga
  *         content:
  *           application/pdf:
  *             schema:

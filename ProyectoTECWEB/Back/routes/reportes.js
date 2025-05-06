@@ -22,7 +22,7 @@ const tiposValidos = [
 
 /**
  * @swagger
- * /reportes/consultas:
+ * /api/reportes/consultas:
  *   get:
  *     summary: Obtener estadísticas de consultas
  *     tags: [Reportes]
@@ -40,7 +40,7 @@ router.get('/consultas', verificarToken, validarRol('MIGA'), reportesController.
 
 /**
  * @swagger
- * /reportes/documentos:
+ * /api/reportes/documentos:
  *   get:
  *     summary: Obtener estadísticas de documentos
  *     tags: [Reportes]
@@ -58,7 +58,7 @@ router.get('/documentos', verificarToken, validarRol('MIGA'), reportesController
 
 /**
  * @swagger
- * /reportes/documentos/tipo/{tipo}:
+ * /api/reportes/documentos/tipo/{tipo}:
  *   get:
  *     summary: Obtener documentos por tipo
  *     tags: [Reportes]
@@ -92,7 +92,7 @@ router.get(
 
 /**
  * @swagger
- * /reportes/documentos/anio/{anio}:
+ * /api/reportes/documentos/anio/{anio}:
  *   get:
  *     summary: Obtener documentos por año
  *     tags: [Reportes]
