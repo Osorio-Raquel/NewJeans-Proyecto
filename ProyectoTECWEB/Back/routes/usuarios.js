@@ -44,6 +44,10 @@ const router = express.Router();
  *                 type: string
  *               rol:
  *                 type: string
+ *                 enum:
+ *                   - MIGA
+ *                   - COMUNIDAD
+ *                 description: "El rol del usuario, puede ser 'MIGA' o 'COMUNIDAD'."
  *     responses:
  *       201:
  *         description: Usuario registrado exitosamente.
@@ -53,6 +57,7 @@ const router = express.Router();
  *         description: Error en el servidor.
  */
 router.post('/register', register);
+
 
 /**
  * @swagger

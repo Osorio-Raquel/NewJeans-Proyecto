@@ -40,8 +40,8 @@ const router = express.Router();
  *         schema:
  *           type: integer
  *           format: int32
- *           minimum: 2000
- *           maximum: 2024
+ *           minimum: 1900
+ *           maximum: 2100
  *         description: Año de publicación del documento
  * 
  *     responses:

@@ -5,36 +5,49 @@ export async function buscarDocumentosDB(filtros) {
   let sql = `SELECT * FROM documentos WHERE vigente = TRUE`;
   const valores = [];
 
-  if (nombre) {
+  // Lista de tipos válidos según tu ENUM en la base de datos
+  const tiposValidos = ['ley', 'decreto', 'resolucion', 'circular', 'reglamento', 'otro', 'norma', 'programa', 'resolucion_municipal'];
+
+  // Filtro por nombre
+  if (nombre && typeof nombre === 'string') {
     sql += ` AND LOWER(descripcion) COLLATE utf8mb4_general_ci LIKE ?`;
     valores.push(`%${nombre.toLowerCase()}%`);
   }
 
-  if (tipo) {
-    sql += ` AND tipo = ?`; // tipo es ENUM, así que match exacto
+  // Filtro por tipo (validado)
+  if (tipo && tiposValidos.includes(tipo)) {
+    sql += ` AND tipo = ?`;
     valores.push(tipo);
   }
 
-  if (anio) {
+  // Filtro por año (convertido a número seguro)
+  const anioNum = parseInt(anio);
+  if (!isNaN(anioNum)) {
     sql += ` AND anio = ?`;
-    valores.push(anio);
+    valores.push(anioNum);
   }
 
-  if (fuente) {
+  // Filtro por fuente
+  if (fuente && typeof fuente === 'string') {
     sql += ` AND LOWER(fuente) COLLATE utf8mb4_general_ci LIKE ?`;
     valores.push(`%${fuente.toLowerCase()}%`);
   }
 
-  if (palabra) {
+  // Filtro por palabra clave (en descripción o relevancia)
+  if (palabra && typeof palabra === 'string') {
+    const palabraLower = `%${palabra.toLowerCase()}%`;
     sql += ` AND (
       LOWER(descripcion) COLLATE utf8mb4_general_ci LIKE ? OR
       LOWER(relevancia) COLLATE utf8mb4_general_ci LIKE ?
     )`;
-    const palabraLower = `%${palabra.toLowerCase()}%`;
     valores.push(palabraLower, palabraLower);
   }
 
-  const [rows] = await db.query(sql, valores);
-  return rows; // ¡devuelve los textos tal como están escritos con sus tildes!
+  try {
+    const [rows] = await db.query(sql, valores);
+    return rows;
+  } catch (error) {
+    console.error('Error al buscar documentos:', error);
+    throw new Error('Error en la consulta a la base de datos');
+  }
 }
-
