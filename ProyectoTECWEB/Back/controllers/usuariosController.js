@@ -6,7 +6,7 @@ export async function register(req, res) {
   try {
     const { nombres, apellidop, apellidom, correo, contraseña, rol } = req.body;
 
-    if (!nombres || !correo || !contraseña || !rol) {
+    if (!nombres || !correo || !contraseña) {
       return res.status(400).json({ mensaje: 'Faltan campos obligatorios' });
     }
 
@@ -15,7 +15,8 @@ export async function register(req, res) {
 
     const hash = await bcrypt.hash(contraseña, 10);
 
-    await crearUsuario({ nombres, apellidop, apellidom, correo, contraseña: hash, rol });
+    const rolAsignado = rol || 'COMUNIDAD';
+    await crearUsuario({ nombres, apellidop, apellidom, correo, contraseña: hash, rol: rolAsignado });
 
     res.status(201).json({ mensaje: `Usuario ${rol} creado correctamente` });
 

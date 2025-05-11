@@ -6,10 +6,10 @@ export async function buscarPorCorreo(correo) {
 }
 
 export async function crearUsuario(data) {
-  const { nombres, apellidop, apellidom, correo, contraseña, rol } = data;
+  const { nombres, apellidop, apellidom, correo, contraseña } = data;
   const sql = `
-    INSERT INTO usuarios (nombres, apellidop, apellidom, correo, contraseña, rol)
-    VALUES (?, ?, ?, ?, ?, ?)
+    INSERT INTO usuarios (nombres, apellidop, apellidom, correo, contraseña)
+    VALUES (?, ?, ?, ?, ?)
   `;
-  await db.query(sql, [nombres, apellidop, apellidom, correo, contraseña, rol]);
+  await db.query(sql, [nombres, apellidop, apellidom, correo, contraseña]);
 }

@@ -65,6 +65,8 @@ const router = express.Router();
  *       403:
  *         description: Prohibido
  */
+// Registrar nuevo documento (POST)
+router.post('/', verificarToken, soloMIGA, registrarDocumento);
 
 /**
  * @swagger

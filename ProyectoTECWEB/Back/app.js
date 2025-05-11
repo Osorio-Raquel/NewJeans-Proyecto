@@ -9,7 +9,7 @@ import documentosFiltradoRoutes from './routes/documentosFiltrado.js';
 import historialBuscarRoutes from './routes/historialBuscar.js';
 import reportesRoutes from './routes/reportes.js';
 import reportesPDFRoutes from './routes/reportesPDF.js';
-
+import favoritosRoutes from './routes/favoritos.js';
 
 const app = express();
 
@@ -23,6 +23,8 @@ app.use('/api/documentos', documentosRoutes);
 app.use('/api/buscar', documentosBuscarRoutes);
 app.use('/api/reportes', reportesRoutes);
 app.use('/api/reportes/pdf', reportesPDFRoutes);
+app.use('/api/favoritos', favoritosRoutes);
+
 
 export default app;
 
