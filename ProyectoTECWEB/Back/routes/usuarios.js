@@ -45,9 +45,9 @@ const router = express.Router();
  *               rol:
  *                 type: string
  *                 enum:
- *                   - MIGA
  *                   - COMUNIDAD
- *                 description: "El rol del usuario, puede ser 'MIGA' o 'COMUNIDAD'."
+ *                   - MIGA
+ *                 description: "Rol del usuario. Solo se permite 'MIGA' o 'COMUNIDAD'."
  *     responses:
  *       201:
  *         description: Usuario registrado exitosamente.
