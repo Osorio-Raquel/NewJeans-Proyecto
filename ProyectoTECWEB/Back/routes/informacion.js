@@ -20,7 +20,7 @@ const router = express.Router();
 
 /**
  * @swagger
- * /informacion:
+ * /api/informacion:
  *   get:
  *     summary: Listar información pública
  *     tags: [Información Pública]
@@ -32,7 +32,7 @@ router.get('/', listarInformacionPublica);
 
 /**
  * @swagger
- * /informacion:
+ * /api/informacion:
  *   post:
  *     summary: Crear nueva información (solo MIGA)
  *     tags: [Información Pública]
@@ -73,7 +73,7 @@ router.post(
 
 /**
  * @swagger
- * /informacion/{id}:
+ * /api/informacion/{id}:
  *   put:
  *     summary: Editar información existente (solo MIGA)
  *     tags: [Información Pública]

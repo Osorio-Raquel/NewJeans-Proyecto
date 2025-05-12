@@ -12,7 +12,7 @@ const router = express.Router();
 
 /**
  * @swagger
- * /propuestas/publicas:
+ * /api/propuestas/publicas:
  *   get:
  *     summary: Listar propuestas públicas
  *     tags: [Propuestas Públicas]

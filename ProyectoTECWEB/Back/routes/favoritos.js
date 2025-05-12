@@ -17,7 +17,7 @@ const router = express.Router();
 
 /**
  * @swagger
- * /favoritos:
+ * /api/favoritos:
  *   get:
  *     summary: Listar todos los documentos favoritos del usuario
  *     tags: [Favoritos]
@@ -33,7 +33,7 @@ router.get('/', verificarToken, listarFavoritosController);
 
 /**
  * @swagger
- * /favoritos:
+ * /api/favoritos:
  *   post:
  *     summary: Agregar un documento a favoritos
  *     tags: [Favoritos]
@@ -58,7 +58,7 @@ router.post('/:codigo', verificarToken, agregarFavoritoController);
 
 /**
  * @swagger
- * /favoritos:
+ * /api/favoritos:
  *   delete:
  *     summary: Eliminar un documento de favoritos
  *     tags: [Favoritos]

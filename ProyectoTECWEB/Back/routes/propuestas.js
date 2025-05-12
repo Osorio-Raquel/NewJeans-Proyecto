@@ -22,7 +22,7 @@ const router = express.Router();
 
 /**
  * @swagger
- * /propuestas:
+ * /api/propuestas:
  *   post:
  *     summary: Crear una nueva propuesta (solo COMUNIDAD)
  *     tags: [Propuestas]
@@ -64,7 +64,7 @@ router.post(
 // Comunidad: ver sus propuestas
 /**
  * @swagger
- * /propuestas/mis:
+ * /api/propuestas/mis:
  *   get:
  *     summary: Obtener mis propuestas (solo COMUNIDAD)
  *     tags: [Propuestas]
@@ -83,7 +83,7 @@ router.get('/mis', verificarToken, soloComunidad, obtenerMisPropuestas);
 // MIGA: ver todas las propuestas
 /**
  * @swagger
- * /propuestas:
+ * /api/propuestas:
  *   get:
  *     summary: Obtener todas las propuestas (solo MIGA)
  *     tags: [Propuestas]
@@ -102,7 +102,7 @@ router.get('/', verificarToken, soloMIGA, obtenerTodasLasPropuestas);
 // MIGA: actualizar estado de una propuesta
 /**
  * @swagger
- * /propuestas/{id}/estado:
+ * /api/propuestas/{id}/estado:
  *   patch:
  *     summary: Cambiar el estado de una propuesta (solo MIGA)
  *     tags: [Propuestas]
