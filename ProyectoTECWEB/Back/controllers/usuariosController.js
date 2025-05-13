@@ -10,7 +10,7 @@ export async function register(req, res) {
       return res.status(400).json({ mensaje: 'Faltan campos obligatorios' });
     }
 
-    const usuarioExistente = await buscarPorCorreo(correo);
+    const usuarioExistente = await  crearUsuario(data);
     if (usuarioExistente) return res.status(400).json({ mensaje: 'Correo ya registrado' });
 
     const hash = await bcrypt.hash(contraseña, 10);
