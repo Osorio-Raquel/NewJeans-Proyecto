@@ -191,33 +191,53 @@ export async function cambiarContrasenia(req, res) {
     const { actual, nueva } = req.body;
     const userId = req.usuario.id;
 
+    console.log('--- CAMBIO CONTRASEÑA ---');
+    console.log('User ID desde token:', userId);
+    console.log('Contraseña actual recibida:', actual);
+    console.log('Contraseña nueva recibida:', nueva);
+
     if (!actual || !nueva) {
       return res.status(400).json({ mensaje: 'Debe proporcionar la contraseña actual y la nueva' });
     }
 
-    const [rows] = await db.query('SELECT * FROM usuarios WHERE id = ? AND eliminado = FALSE', [userId]);
+    const [rows] = await db.query(
+      'SELECT id, contraseña FROM usuarios WHERE id = ? AND eliminado = FALSE',
+      [userId]
+    );
+
     const usuario = rows[0];
 
     if (!usuario) {
+      console.log('Usuario NO encontrado en BD');
       return res.status(404).json({ mensaje: 'Usuario no encontrado' });
     }
 
+    console.log('Hash ACTUAL en BD:', usuario.contraseña);
+
     const match = await bcrypt.compare(actual, usuario.contraseña);
+    console.log('¿Contraseña actual coincide?:', match);
+
     if (!match) {
       return res.status(401).json({ mensaje: 'La contraseña actual es incorrecta' });
     }
 
     const mismaContrasenia = await bcrypt.compare(nueva, usuario.contraseña);
+    console.log('¿Nueva contraseña = antigua?:', mismaContrasenia);
+
     if (mismaContrasenia) {
       return res.status(400).json({ mensaje: 'La nueva contraseña no puede ser igual a la actual' });
     }
 
+    console.log('➡️ Enviando nueva contraseña a editarUsuario()');
+
     await editarUsuario(userId, { contraseña: nueva });
+
+    console.log('✅ editarUsuario ejecutado');
 
     res.json({ mensaje: 'Contraseña actualizada correctamente' });
 
   } catch (error) {
-    console.error('Error al cambiar contraseña:', error.message);
+    console.error('🔥 Error al cambiar contraseña:', error.message);
     res.status(500).json({ mensaje: 'Error al cambiar contraseña', error: error.message });
   }
 }

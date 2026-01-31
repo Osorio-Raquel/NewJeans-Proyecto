@@ -51,6 +51,11 @@ export async function crearUsuario(data) {
 
 // Editar datos de un usuario
 export async function editarUsuario(id, datos) {
+  console.log('==============================');
+  console.log('🟡 editarUsuario() llamado');
+  console.log('ID recibido:', id);
+  console.log('Datos recibidos:', datos);
+
   const {
     nombres,
     apellidop,
@@ -67,7 +72,6 @@ export async function editarUsuario(id, datos) {
   let campos = [];
   let valores = [];
 
-  // Agregar los campos modificados a la consulta SQL
   if (nombres) {
     campos.push("nombres = ?");
     valores.push(nombres);
@@ -104,15 +108,34 @@ export async function editarUsuario(id, datos) {
     campos.push("zona_id = ?");
     valores.push(zona_id);
   }
+
+  // 🔥 LOG CRÍTICO
   if (contraseña) {
+    console.log('🔐 Cambio de contraseña detectado');
+    console.log('Contraseña NUEVA (texto plano):', contraseña);
+
     const hash = await bcrypt.hash(contraseña, 10);
+
+    console.log('🔐 Hash NUEVO generado:', hash);
+
     campos.push("contraseña = ?");
     valores.push(hash);
   }
 
-  if (campos.length === 0) return; // Nada que editar
+  if (campos.length === 0) {
+    console.log('⚠️ No hay campos para actualizar');
+    return;
+  }
 
   valores.push(id);
+
   const sql = `UPDATE usuarios SET ${campos.join(', ')} WHERE id = ? AND eliminado = FALSE`;
+
+  console.log('🧾 SQL FINAL:', sql);
+  console.log('📦 VALORES:', valores);
+
   await db.query(sql, valores);
+
+  console.log('✅ UPDATE ejecutado correctamente');
+  console.log('==============================');
 }

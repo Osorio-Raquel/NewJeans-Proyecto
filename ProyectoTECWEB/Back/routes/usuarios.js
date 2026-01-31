@@ -111,44 +111,6 @@ router.post('/login', login);
 router.get('/perfil', verificarToken, perfil);
 /**
  * @swagger
- * /api/usuarios/{id}:
- *   patch:
- *     summary: Editar datos generales del usuario
- *     description: Permite actualizar datos básicos del usuario. No se permite cambiar rol ni eliminado.
- *     tags: [Usuarios]
- *     security:
- *       - bearerAuth: []
- *     parameters:
- *       - in: path
- *         name: id
- *         required: true
- *         schema:
- *           type: integer
- *         description: ID del usuario
- *     requestBody:
- *       required: true
- *       content:
- *         application/json:
- *           schema:
- *             type: object
- *             example:
- *               nombres: Juan actualizado
- *               apellidop: Pérez
- *               correo: nuevo@mail.com
- *               macrodistrito_id: 1
- *               ambitoactividad_id: 2
- *               zona_id: 3
- *     responses:
- *       200:
- *         description: Usuario actualizado correctamente
- *       403:
- *         description: Intento de modificar campos no permitidos
- *       500:
- *         description: Error al actualizar usuario
- */
-router.patch('/:id', verificarToken, actualizarUsuarioGeneral);
-/**
- * @swagger
  * tags:
  *   name: Usuarios Actualización
  *   description: Gestión de autenticación de usuarios en lo ultimo
@@ -189,6 +151,45 @@ router.patch('/:id', verificarToken, actualizarUsuarioGeneral);
  *         description: Error al cambiar contraseña
  */
 router.patch('/cambiar-contrasenia', verificarToken, cambiarContrasenia);
+/**
+ * @swagger
+ * /api/usuarios/{id}:
+ *   patch:
+ *     summary: Editar datos generales del usuario
+ *     description: Permite actualizar datos básicos del usuario. No se permite cambiar rol ni eliminado.
+ *     tags: [Usuarios]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: integer
+ *         description: ID del usuario
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             example:
+ *               nombres: Juan actualizado
+ *               apellidop: Pérez
+ *               correo: nuevo@mail.com
+ *               macrodistrito_id: 1
+ *               ambitoactividad_id: 2
+ *               zona_id: 3
+ *     responses:
+ *       200:
+ *         description: Usuario actualizado correctamente
+ *       403:
+ *         description: Intento de modificar campos no permitidos
+ *       500:
+ *         description: Error al actualizar usuario
+ */
+router.patch('/:id', verificarToken, actualizarUsuarioGeneral);
+
 /**
  * @swagger
  * /api/usuarios/registro-comunidad:
