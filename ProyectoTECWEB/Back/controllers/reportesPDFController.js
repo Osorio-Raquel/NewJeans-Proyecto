@@ -153,33 +153,80 @@ const reportesPDFController = {
   /* ================= CONSULTAS ================= */
 
   getPDFConsultas: async (req, res) => {
-    const consultas = await reporteModel.getHistorialConsultas();
+  const consultas = await reporteModel.getHistorialConsultas();
 
-    const buffer = await generarPDF({
-      titulo: 'Reporte de Historial de Consultas',
-      subtitulo: 'Registro de búsquedas realizadas por usuarios',
-      generarContenido: (doc, checkPageSpace) => {
+  const buffer = await generarPDF({
+    titulo: 'Reporte de Historial de Consultas',
+    subtitulo: 'Registro de búsquedas realizadas por usuarios',
+    generarContenido: (doc, checkPageSpace) => {
 
-        consultas.forEach((c, index) => {
-          checkPageSpace(80);
+      const marginLeft = doc.page.margins.left; // 50
+      const columnGap = 20;
+      const columnWidth = (doc.page.width - marginLeft * 2 - columnGap) / 2;
 
-          doc.fontSize(10).fillColor('#000')
-            .text(`${index + 1}. Palabra: ${c.palabra}`)
-            .text(`Campo: ${c.buscado_donde}`)
-            .text(`Fecha: ${new Date(c.buscado_en).toLocaleString()}`);
+      let yLeft = doc.y;
+      let yRight = doc.y;
+      let useLeft = true;
 
-          doc.moveDown(0.6);
-        });
-      }
-    });
+      consultas.forEach((c, index) => {
+        const blockHeight = 55;
 
-    res.setHeader('Content-Type', 'application/pdf');
-    res.setHeader(
-      'Content-Disposition',
-      'inline; filename="consultas.pdf"'
-    );
-    res.send(buffer);
-  }
+        // 🔁 alternar columna
+        let x = useLeft
+          ? marginLeft
+          : marginLeft + columnWidth + columnGap;
+
+        let y = useLeft ? yLeft : yRight;
+
+        // 👉 salto de página si no entra en ninguna columna
+        if (Math.max(yLeft, yRight) + blockHeight > doc.page.height - 70) {
+          doc.addPage();
+          yLeft = doc.y;
+          yRight = doc.y;
+          x = marginLeft;
+          y = yLeft;
+          useLeft = true;
+        }
+
+        doc
+          .fontSize(10)
+          .fillColor('#000')
+          .text(`${index + 1}. Palabra: ${c.palabra}`, x, y, {
+            width: columnWidth,
+            align: 'left'
+          })
+          .text(`Campo: ${c.buscado_donde}`, {
+            width: columnWidth,
+            align: 'left'
+          })
+          .text(
+            `Fecha: ${new Date(c.buscado_en).toLocaleString()}`,
+            { width: columnWidth, align: 'left' }
+          );
+
+        // actualizar cursor de columna usada
+        if (useLeft) {
+          yLeft = doc.y + 5;
+        } else {
+          yRight = doc.y + 5;
+        }
+
+        useLeft = !useLeft;
+      });
+
+      // dejar el cursor abajo del contenido
+      doc.y = Math.max(yLeft, yRight);
+    }
+  });
+
+  res.setHeader('Content-Type', 'application/pdf');
+  res.setHeader(
+    'Content-Disposition',
+    'inline; filename="consultas.pdf"'
+  );
+  res.send(buffer);
+}
+
 };
 
 export default reportesPDFController;
