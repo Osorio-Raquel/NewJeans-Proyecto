@@ -4,7 +4,7 @@ import generarPDF from '../services/pdfService.js';
 
 const reportesPDFController = {
 
-  /* ================= DOCUMENTOS ================= */
+
 
   getPDFDocumentos: async (req, res) => {
     try {
@@ -17,10 +17,9 @@ const reportesPDFController = {
 
           documentos.forEach((d, index) => {
 
-            // Altura real del bloque
+       
             checkPageSpace(200);
 
-            // Título del documento
             doc
               .fontSize(11)
               .fillColor('#1F3A5F')
@@ -29,7 +28,7 @@ const reportesPDFController = {
             doc.moveDown(0.6);
             doc.fillColor('#000').fontSize(10);
 
-            // Datos básicos (TODO A LA IZQUIERDA)
+           
             doc.text(`Código: ${d.codigo}`);
             doc.text(`Tipo: ${d.tipo}`);
             doc.text(`Año: ${d.anio}`);
@@ -37,7 +36,7 @@ const reportesPDFController = {
 
             doc.moveDown(0.6);
 
-            // Bloques largos
+           
             const block = (label, value) => {
               doc
                 .fontSize(10)
@@ -74,7 +73,7 @@ const reportesPDFController = {
     }
   },
 
-  /* ================= DOCUMENTOS POR TIPO ================= */
+
 
   getPDFDocumentosPorTipo: async (req, res) => {
     const errors = validationResult(req);
@@ -112,7 +111,7 @@ const reportesPDFController = {
     res.send(buffer);
   },
 
-  /* ================= DOCUMENTOS POR AÑO ================= */
+
 
   getPDFDocumentosPorAnio: async (req, res) => {
     const errors = validationResult(req);
@@ -150,7 +149,7 @@ const reportesPDFController = {
     res.send(buffer);
   },
 
-  /* ================= CONSULTAS ================= */
+
 
   getPDFConsultas: async (req, res) => {
   const consultas = await reporteModel.getHistorialConsultas();
@@ -178,7 +177,7 @@ const reportesPDFController = {
 
         let y = useLeft ? yLeft : yRight;
 
-        // 👉 salto de página si no entra en ninguna columna
+     
         if (Math.max(yLeft, yRight) + blockHeight > doc.page.height - 70) {
           doc.addPage();
           yLeft = doc.y;
@@ -204,7 +203,6 @@ const reportesPDFController = {
             { width: columnWidth, align: 'left' }
           );
 
-        // actualizar cursor de columna usada
         if (useLeft) {
           yLeft = doc.y + 5;
         } else {
@@ -214,7 +212,6 @@ const reportesPDFController = {
         useLeft = !useLeft;
       });
 
-      // dejar el cursor abajo del contenido
       doc.y = Math.max(yLeft, yRight);
     }
   });
