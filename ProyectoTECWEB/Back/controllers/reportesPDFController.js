@@ -75,79 +75,146 @@ const reportesPDFController = {
 
 
 
-  getPDFDocumentosPorTipo: async (req, res) => {
-    const errors = validationResult(req);
-    if (!errors.isEmpty()) {
-      return res.status(400).json({ errores: errors.array() });
+getPDFDocumentosPorTipo: async (req, res) => {
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    return res.status(400).json({ errores: errors.array() });
+  }
+
+  const { tipo } = req.params;
+  const documentos = await reporteModel.getDocumentosPorTipo(tipo);
+
+  const buffer = await generarPDF({
+    titulo: 'Reporte de Documentos por Tipo',
+    subtitulo: `Tipo seleccionado: ${tipo}`,
+    generarContenido: (doc, checkPageSpace) => {
+
+      documentos.forEach((d, index) => {
+        checkPageSpace(200);
+
+        doc
+          .fontSize(11)
+          .fillColor('#1F3A5F')
+          .text(`Documento ${index + 1}`, { underline: true });
+
+        doc.moveDown(0.6);
+        doc.fillColor('#000').fontSize(10);
+
+        doc.text(`Código: ${d.codigo}`);
+        doc.text(`Tipo: ${d.tipo}`);
+        doc.text(`Año: ${d.anio}`);
+        doc.text(`Aplicación: ${d.aplicacion}`);
+
+        doc.moveDown(0.6);
+
+        doc.fontSize(10).fillColor('#333').text('Fuente:');
+        doc.fillColor('#000').text(d.fuente || '-', { width: 495 });
+
+        doc.moveDown(0.4);
+        doc.fillColor('#333').text('Descripción:');
+        doc.fillColor('#000').text(d.descripcion || '-', { width: 495 });
+
+        doc.moveDown(0.4);
+        doc.fillColor('#333').text('Relevancia:');
+        doc.fillColor('#000').text(d.relevancia || '-', { width: 495 });
+
+        doc.moveDown(0.4);
+        doc.fillColor('#333').text('Conceptos CPE:');
+        doc.fillColor('#000').text(d.conceptos_cpe || '-', { width: 495 });
+
+        doc.moveDown(0.4);
+        doc.fillColor('#333').text('Jerarquía:');
+        doc.fillColor('#000').text(d.jerarquia || '-', { width: 495 });
+
+        doc.moveDown(0.4);
+        doc.fillColor('#333').text('Vigente:');
+        doc.fillColor('#000').text(d.vigente ? 'Sí' : 'No');
+
+        doc.moveDown(0.8);
+        doc.moveTo(50, doc.y).lineTo(545, doc.y).stroke();
+        doc.moveDown(1);
+      });
     }
+  });
 
-    const { tipo } = req.params;
-    const documentos = await reporteModel.getDocumentosPorTipo(tipo);
-
-    const buffer = await generarPDF({
-      titulo: 'Reporte de Documentos por Tipo',
-      subtitulo: `Tipo seleccionado: ${tipo}`,
-      generarContenido: (doc, checkPageSpace) => {
-
-        documentos.forEach((d, index) => {
-          checkPageSpace(120);
-
-          doc.fontSize(10).fillColor('#000')
-            .text(`${index + 1}. Código: ${d.codigo}`)
-            .text(`Año: ${d.anio}`)
-            .text(`Descripción:`)
-            .text(d.descripcion || '-', { width: 495 });
-
-          doc.moveDown(0.8);
-        });
-      }
-    });
-
-    res.setHeader('Content-Type', 'application/pdf');
-    res.setHeader(
-      'Content-Disposition',
-      `inline; filename="documentos_${tipo}.pdf"`
-    );
-    res.send(buffer);
-  },
+  res.setHeader('Content-Type', 'application/pdf');
+  res.setHeader(
+    'Content-Disposition',
+    `inline; filename="documentos_${tipo}.pdf"`
+  );
+  res.send(buffer);
+},
 
 
+ getPDFDocumentosPorAnio: async (req, res) => {
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    return res.status(400).json({ errores: errors.array() });
+  }
 
-  getPDFDocumentosPorAnio: async (req, res) => {
-    const errors = validationResult(req);
-    if (!errors.isEmpty()) {
-      return res.status(400).json({ errores: errors.array() });
+  const { anio } = req.params;
+  const documentos = await reporteModel.getDocumentosPorAnio(anio);
+
+  const buffer = await generarPDF({
+    titulo: 'Reporte de Documentos por Año',
+    subtitulo: `Año seleccionado: ${anio}`,
+    generarContenido: (doc, checkPageSpace) => {
+
+      documentos.forEach((d, index) => {
+        checkPageSpace(200);
+
+        doc
+          .fontSize(11)
+          .fillColor('#1F3A5F')
+          .text(`Documento ${index + 1}`, { underline: true });
+
+        doc.moveDown(0.6);
+        doc.fillColor('#000').fontSize(10);
+
+        doc.text(`Código: ${d.codigo}`);
+        doc.text(`Tipo: ${d.tipo}`);
+        doc.text(`Año: ${d.anio}`);
+        doc.text(`Aplicación: ${d.aplicacion}`);
+
+        doc.moveDown(0.6);
+
+        doc.fontSize(10).fillColor('#333').text('Fuente:');
+        doc.fillColor('#000').text(d.fuente || '-', { width: 495 });
+
+        doc.moveDown(0.4);
+        doc.fillColor('#333').text('Descripción:');
+        doc.fillColor('#000').text(d.descripcion || '-', { width: 495 });
+
+        doc.moveDown(0.4);
+        doc.fillColor('#333').text('Relevancia:');
+        doc.fillColor('#000').text(d.relevancia || '-', { width: 495 });
+
+        doc.moveDown(0.4);
+        doc.fillColor('#333').text('Conceptos CPE:');
+        doc.fillColor('#000').text(d.conceptos_cpe || '-', { width: 495 });
+
+        doc.moveDown(0.4);
+        doc.fillColor('#333').text('Jerarquía:');
+        doc.fillColor('#000').text(d.jerarquia || '-', { width: 495 });
+
+        doc.moveDown(0.4);
+        doc.fillColor('#333').text('Vigente:');
+        doc.fillColor('#000').text(d.vigente ? 'Sí' : 'No');
+
+        doc.moveDown(0.8);
+        doc.moveTo(50, doc.y).lineTo(545, doc.y).stroke();
+        doc.moveDown(1);
+      });
     }
+  });
 
-    const { anio } = req.params;
-    const documentos = await reporteModel.getDocumentosPorAnio(anio);
-
-    const buffer = await generarPDF({
-      titulo: 'Reporte de Documentos por Año',
-      subtitulo: `Año seleccionado: ${anio}`,
-      generarContenido: (doc, checkPageSpace) => {
-
-        documentos.forEach((d, index) => {
-          checkPageSpace(120);
-
-          doc.fontSize(10).fillColor('#000')
-            .text(`${index + 1}. Código: ${d.codigo}`)
-            .text(`Tipo: ${d.tipo}`)
-            .text(`Descripción:`)
-            .text(d.descripcion || '-', { width: 495 });
-
-          doc.moveDown(0.8);
-        });
-      }
-    });
-
-    res.setHeader('Content-Type', 'application/pdf');
-    res.setHeader(
-      'Content-Disposition',
-      `inline; filename="documentos_${anio}.pdf"`
-    );
-    res.send(buffer);
-  },
+  res.setHeader('Content-Type', 'application/pdf');
+  res.setHeader(
+    'Content-Disposition',
+    `inline; filename="documentos_${anio}.pdf"`
+  );
+  res.send(buffer);
+},
 
 
 

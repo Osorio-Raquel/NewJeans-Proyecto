@@ -13,11 +13,14 @@ export default function generarPDF({ titulo, subtitulo = '', generarContenido })
       doc.on('data', buffers.push.bind(buffers));
       doc.on('end', () => resolve(Buffer.concat(buffers)));
 
-      const fechaGeneracion = new Date();
+      const fechaGeneracion = new Date().toLocaleString('es-BO', {
+  timeZone: 'America/La_Paz'
+});
 
-      /* ================= HEADER ================= */
+
+      
       const header = () => {
-        // 🔥 SIEMPRE resetear cursor
+        
         doc.x = doc.page.margins.left;
 
         doc.fontSize(14)
@@ -38,24 +41,24 @@ export default function generarPDF({ titulo, subtitulo = '', generarContenido })
             .text(subtitulo, { align: 'left' });
         }
 
-        // 👉 FECHA: derecha pero SIN contaminar
+        
         doc.fontSize(8)
           .fillColor('#555')
           .text(
-            `Fecha de generación: ${fechaGeneracion.toLocaleString()}`,
-            doc.page.width - doc.page.margins.right - 200,
-            60,
-            { width: 200, align: 'right' }
-          );
+  `Fecha de generación: ${fechaGeneracion}`,
+  doc.page.width - doc.page.margins.right - 200,
+  60,
+  { width: 200, align: 'right' }
+);
 
         doc.moveTo(50, 95).lineTo(545, 95).stroke();
 
-        // 🔥 RESET TOTAL DEL CURSOR
+     
         doc.x = doc.page.margins.left;
         doc.y = 110;
       };
 
-      /* ================= SALTO CONTROLADO ================= */
+      
       const checkPageSpace = (blockHeight = 160) => {
         if (doc.y + blockHeight > doc.page.height - 70) {
           doc.addPage();
@@ -63,7 +66,7 @@ export default function generarPDF({ titulo, subtitulo = '', generarContenido })
         }
       };
 
-      /* ================= FOOTER ================= */
+     
       const footer = () => {
         doc.fontSize(8)
           .fillColor('#666')
